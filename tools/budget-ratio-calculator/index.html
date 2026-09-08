@@ -360,6 +360,7 @@ function update() {
 
     categories.forEach((c, i) => {
       const amt = income * c.ratio / 100;
+      c.amount = amt;
       totalRatio += c.ratio;
       totalAmt += amt;
       document.getElementById(`readout-${i}`).textContent = fmtWon(amt);
