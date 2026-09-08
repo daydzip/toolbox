@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>예산 비율 계산기</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #16302b;
+    --ink-soft: #3d5a53;
+    --paper: #f6f4ee;
+    --card: #ffffff;
+    --line: #e2ddd0;
+    --muted: #8a8577;
+    --gold: #b8923f;
+    --gold-soft: #f2e8d2;
+    --danger: #b3492f;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: 'IBM Plex Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 40px 16px 64px;
+  }
+
+  .wrap { max-width: 620px; margin: 0 auto; }
+
+  .eyebrow {
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 0.02em;
+    margin-bottom: 6px;
+  }
+
+  h1 {
+    font-size: 26px;
+    font-weight: 700;
+    margin: 0 0 24px;
+    letter-spacing: -0.01em;
+  }
+
+  .switch {
+    display: flex;
+    background: var(--line);
+    border-radius: 999px;
+    padding: 4px;
+    margin-bottom: 24px;
+    position: relative;
+  }
+
+  .switch button {
+    flex: 1;
+    border: none;
+    background: transparent;
+    padding: 10px 12px;
+    font-family: inherit;
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--ink-soft);
+    border-radius: 999px;
+    cursor: pointer;
+    position: relative;
+    z-index: 1;
+    transition: color 0.25s ease;
+  }
+
+  .switch button.active { color: #fff; }
+
+  .switch .thumb {
+    position: absolute;
+    top: 4px;
+    bottom: 4px;
+    width: calc(50% - 4px);
+    background: var(--ink);
+    border-radius: 999px;
+    left: 4px;
+    transition: transform 0.28s cubic-bezier(.4,0,.2,1);
+  }
+
+  .switch .thumb.right { transform: translateX(100%); }
+
+  .card {
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    padding: 24px;
+    transition: box-shadow 0.4s ease, border-color 0.4s ease;
+  }
+
+  .card.perfect {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px var(--gold-soft);
+  }
+
+  .income-field {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+    padding-bottom: 18px;
+    margin-bottom: 18px;
+    border-bottom: 1px solid var(--line);
+  }
+
+  .income-field label {
+    font-size: 13px;
+    color: var(--muted);
+    white-space: nowrap;
+  }
+
+  .income-field input {
+    flex: 1;
+    text-align: right;
+    font-size: 20px;
+    font-weight: 700;
+    font-family: inherit;
+    border: none;
+    color: var(--ink);
+    background: transparent;
+    padding: 0;
+    min-width: 0;
+  }
+
+  .income-field input:focus { outline: none; }
+  .income-field .unit { font-size: 14px; color: var(--muted); }
+
+  .income-block { flex: 1; }
+  .sub-krw {
+    font-size: 11px;
+    color: var(--muted);
+    text-align: right;
+    margin-top: 2px;
+  }
+
+  table { width: 100%; border-collapse: collapse; }
+
+  thead th {
+    text-align: left;
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 600;
+    padding: 0 6px 10px;
+  }
+
+  thead th:not(:first-child) { text-align: right; }
+
+  tbody td {
+    padding: 10px 6px;
+    border-bottom: 1px solid var(--line);
+    font-size: 15px;
+    vertical-align: middle;
+  }
+
+  tbody tr:last-child td { border-bottom: none; }
+
+  .cat-name { font-weight: 500; }
+
+  .num-input {
+    width: 100%;
+    text-align: right;
+    font-family: inherit;
+    font-size: 15px;
+    font-weight: 600;
+    border: 1px solid transparent;
+    background: var(--paper);
+    border-radius: 8px;
+    padding: 7px 8px;
+    color: var(--ink);
+    transition: border-color 0.15s ease;
+  }
+
+  .num-input:focus {
+    outline: none;
+    border-color: var(--ink-soft);
+    background: #fff;
+  }
+
+  .readout {
+    text-align: right;
+    color: var(--ink-soft);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .col-input { width: 34%; }
+  .col-readout { width: 34%; }
+
+  tfoot td {
+    padding: 16px 6px 4px;
+    font-weight: 700;
+    font-size: 15px;
+    border-top: 2px solid var(--ink);
+  }
+
+  tfoot td:not(:first-child) { text-align: right; }
+
+  .status {
+    margin-top: 16px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 13px;
+    font-weight: 600;
+    min-height: 20px;
+    color: var(--danger);
+  }
+
+  .status.ok { color: var(--gold); }
+
+  .status .dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: currentColor;
+    flex-shrink: 0;
+  }
+
+  .hint {
+    margin-top: 14px;
+    font-size: 12px;
+    color: var(--muted);
+    line-height: 1.5;
+  }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">MONTHLY BUDGET</div>
+  <h1>예산 비율 계산기</h1>
+
+  <div class="switch">
+    <div class="thumb" id="thumb"></div>
+    <button id="tabRatio" class="active">비율 → 금액</button>
+    <button id="tabAmount">금액 → 비율</button>
+  </div>
+
+  <div class="card" id="card">
+
+    <div class="income-field" id="incomeField">
+      <label>월 세후소득</label>
+      <div class="income-block">
+        <input id="income" type="number" value="6000000" inputmode="numeric" style="width:100%;">
+        <div class="sub-krw" id="incomeSub"></div>
+      </div>
+      <span class="unit">원</span>
+    </div>
+
+    <table>
+      <thead>
+        <tr>
+          <th>구분</th>
+          <th class="col-input" id="colInputLabel">비율(%)</th>
+          <th class="col-readout" id="colReadoutLabel">예산 금액</th>
+        </tr>
+      </thead>
+      <tbody id="rows"></tbody>
+      <tfoot>
+        <tr>
+          <td>합계</td>
+          <td id="totalInput"></td>
+          <td id="totalReadout"></td>
+        </tr>
+      </tfoot>
+    </table>
+
+    <div class="status" id="status"><span class="dot"></span><span id="statusText"></span></div>
+  </div>
+
+  <div class="hint" id="hint"></div>
+</div>
+
+<script>
+const categories = [
+  { name: '저축 (자산)', ratio: 50, amount: 3000000 },
+  { name: '생활비',       ratio: 10, amount: 600000 },
+  { name: '활동비',       ratio: 10, amount: 600000 },
+  { name: '주거비',       ratio: 15, amount: 900000 },
+  { name: '교육비',       ratio: 10, amount: 600000 },
+  { name: '비정기',       ratio: 5,  amount: 300000 },
+];
+
+let mode = 'ratio'; // 'ratio' | 'amount'
+
+const rowsEl = document.getElementById('rows');
+const incomeEl = document.getElementById('income');
+const incomeField = document.getElementById('incomeField');
+const totalInputEl = document.getElementById('totalInput');
+const totalReadoutEl = document.getElementById('totalReadout');
+const statusEl = document.getElementById('status');
+const statusTextEl = document.getElementById('statusText');
+const card = document.getElementById('card');
+const hint = document.getElementById('hint');
+const colInputLabel = document.getElementById('colInputLabel');
+const colReadoutLabel = document.getElementById('colReadoutLabel');
+const thumb = document.getElementById('thumb');
+const tabRatio = document.getElementById('tabRatio');
+const tabAmount = document.getElementById('tabAmount');
+
+function fmtWon(n) {
+  return Math.round(n).toLocaleString('ko-KR') + '원';
+}
+function fmtPct(n) {
+  return n.toFixed(1) + '%';
+}
+function fmtKoreanWon(n) {
+  n = Math.round(n);
+  if (n === 0) return '0원';
+  const sign = n < 0 ? '-' : '';
+  n = Math.abs(n);
+  const eok = Math.floor(n / 100000000);
+  const man = Math.floor((n % 100000000) / 10000);
+  const rest = n % 10000;
+  const parts = [];
+  if (eok > 0) parts.push(`${eok.toLocaleString('ko-KR')}억`);
+  if (man > 0) parts.push(`${man.toLocaleString('ko-KR')}만`);
+  if (rest > 0 || parts.length === 0) parts.push(`${rest.toLocaleString('ko-KR')}`);
+  return sign + parts.join(' ') + '원';
+}
+
+function buildRows() {
+  rowsEl.innerHTML = categories.map((c, i) => `
+    <tr>
+      <td class="cat-name">${c.name}</td>
+      <td class="col-input">
+        <input class="num-input" type="number" step="${mode === 'ratio' ? '0.1' : '1000'}" data-idx="${i}">
+        <div class="sub-krw" id="inputSub-${i}"></div>
+      </td>
+      <td class="col-readout">
+        <div class="readout" id="readout-${i}"></div>
+        <div class="sub-krw" id="readoutSub-${i}"></div>
+      </td>
+    </tr>
+  `).join('');
+
+  document.querySelectorAll('.num-input').forEach((inp, i) => {
+    inp.value = mode === 'ratio' ? categories[i].ratio : categories[i].amount;
+    inp.addEventListener('input', e => {
+      const idx = +e.target.dataset.idx;
+      const v = parseFloat(e.target.value) || 0;
+      if (mode === 'ratio') categories[idx].ratio = v;
+      else categories[idx].amount = v;
+      update();
+    });
+  });
+}
+
+function update() {
+  if (mode === 'ratio') {
+    const income = parseFloat(incomeEl.value) || 0;
+    document.getElementById('incomeSub').textContent = fmtKoreanWon(income);
+
+    let totalRatio = 0, totalAmt = 0;
+
+    categories.forEach((c, i) => {
+      const amt = income * c.ratio / 100;
+      totalRatio += c.ratio;
+      totalAmt += amt;
+      document.getElementById(`readout-${i}`).textContent = fmtWon(amt);
+      document.getElementById(`readoutSub-${i}`).textContent = fmtKoreanWon(amt);
+      document.getElementById(`inputSub-${i}`).textContent = '';
+    });
+
+    totalInputEl.textContent = fmtPct(totalRatio);
+    totalReadoutEl.textContent = fmtWon(totalAmt);
+
+    const diff = Math.round((totalRatio - 100) * 10) / 10;
+    const isPerfect = Math.abs(diff) < 0.05;
+
+    card.classList.toggle('perfect', isPerfect);
+    statusEl.classList.toggle('ok', isPerfect);
+    statusTextEl.textContent = isPerfect
+      ? '비율 합계 100% — 소득 전액이 배분되었습니다'
+      : `비율 합계 ${fmtPct(totalRatio)} (100%까지 ${diff > 0 ? '' : '+'}${(-diff).toFixed(1)}%p ${diff > 0 ? '초과' : '남음'})`;
+
+  } else {
+    let totalAmt = 0;
+    categories.forEach(c => totalAmt += c.amount);
+
+    categories.forEach((c, i) => {
+      const pct = totalAmt > 0 ? (c.amount / totalAmt) * 100 : 0;
+      document.getElementById(`readout-${i}`).textContent = fmtPct(pct);
+      document.getElementById(`readoutSub-${i}`).textContent = '';
+      document.getElementById(`inputSub-${i}`).textContent = fmtKoreanWon(c.amount);
+    });
+
+    totalInputEl.textContent = fmtWon(totalAmt);
+    totalReadoutEl.textContent = '100.0%';
+
+    const isPerfect = totalAmt > 0;
+    card.classList.toggle('perfect', isPerfect);
+    statusEl.classList.toggle('ok', isPerfect);
+    statusTextEl.textContent = isPerfect
+      ? `총 ${fmtWon(totalAmt)} 기준으로 비율이 자동 계산되었습니다`
+      : '금액을 입력하면 비율이 계산됩니다';
+  }
+}
+
+function setMode(next) {
+  if (mode === next) return;
+  mode = next;
+
+  const isRatio = mode === 'ratio';
+  tabRatio.classList.toggle('active', isRatio);
+  tabAmount.classList.toggle('active', !isRatio);
+  thumb.classList.toggle('right', !isRatio);
+
+  incomeField.style.display = isRatio ? 'flex' : 'none';
+  colInputLabel.textContent = isRatio ? '비율(%)' : '예산 금액';
+  colReadoutLabel.textContent = isRatio ? '예산 금액' : '비율(%)';
+
+  hint.textContent = isRatio
+    ? '비율(%)을 바꾸면 예산 금액이 자동으로 계산됩니다. 합계가 정확히 100%가 되면 카드 테두리가 골드로 바뀝니다.'
+    : '항목별 금액을 직접 입력하면 전체 대비 비율(%)이 자동으로 계산됩니다.';
+
+  buildRows();
+  update();
+}
+
+tabRatio.addEventListener('click', () => setMode('ratio'));
+tabAmount.addEventListener('click', () => setMode('amount'));
+incomeEl.addEventListener('input', update);
+
+buildRows();
+setMode('ratio');
+</script>
+</body>
+</html>

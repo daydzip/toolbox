@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Toolbox</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=IBM+Plex+Sans+KR:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --ink: #16302b;
+    --ink-soft: #3d5a53;
+    --paper: #f6f4ee;
+    --card: #ffffff;
+    --line: #e2ddd0;
+    --muted: #8a8577;
+    --gold: #b8923f;
+    --gold-soft: #f2e8d2;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: 'IBM Plex Sans KR', -apple-system, BlinkMacSystemFont, sans-serif;
+    background: var(--paper);
+    color: var(--ink);
+    min-height: 100vh;
+    padding: 40px 16px 64px;
+  }
+
+  .wrap { max-width: 720px; margin: 0 auto; }
+
+  .eyebrow {
+    font-size: 13px;
+    color: var(--muted);
+    letter-spacing: 0.02em;
+    margin-bottom: 6px;
+  }
+
+  h1 {
+    font-size: 28px;
+    font-weight: 700;
+    margin: 0 0 8px;
+    letter-spacing: -0.01em;
+  }
+
+  .lede {
+    font-size: 14px;
+    color: var(--ink-soft);
+    margin: 0 0 32px;
+    line-height: 1.6;
+  }
+
+  .grid {
+    display: grid;
+    gap: 12px;
+  }
+
+  .tool-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    background: var(--card);
+    border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 20px 22px;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
+  }
+
+  .tool-card:hover {
+    border-color: var(--gold);
+    box-shadow: 0 0 0 3px var(--gold-soft);
+    transform: translateY(-1px);
+  }
+
+  .tool-name {
+    font-size: 16px;
+    font-weight: 600;
+    margin: 0 0 4px;
+  }
+
+  .tool-desc {
+    font-size: 13px;
+    color: var(--muted);
+    margin: 0;
+  }
+
+  .arrow {
+    font-size: 18px;
+    color: var(--muted);
+    flex-shrink: 0;
+  }
+
+  .empty {
+    padding: 40px 22px;
+    text-align: center;
+    color: var(--muted);
+    font-size: 14px;
+    border: 1px dashed var(--line);
+    border-radius: 14px;
+  }
+
+  footer {
+    margin-top: 40px;
+    font-size: 12px;
+    color: var(--muted);
+    text-align: center;
+  }
+
+  footer a { color: var(--ink-soft); }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="eyebrow">HTML TOOLBOX</div>
+  <h1>Toolbox</h1>
+  <p class="lede">여러 독립형 HTML 유틸리티를 한곳에 모아둔 저장소입니다. 각 카드를 클릭하면 해당 도구가 바로 열립니다.</p>
+
+  <div class="grid" id="grid"></div>
+
+  <footer>새 도구는 <code>/tools/&lt;도구명&gt;/index.html</code> 형태로 추가됩니다.</footer>
+</div>
+
+<script>
+const tools = [
+  {
+    name: '예산 비율 계산기',
+    desc: '월 소득 대비 항목별 예산 비율과 금액을 서로 변환해서 계산합니다.',
+    path: 'tools/budget-ratio-calculator/',
+  },
+];
+
+const grid = document.getElementById('grid');
+
+if (tools.length === 0) {
+  grid.innerHTML = '<div class="empty">아직 등록된 도구가 없습니다.</div>';
+} else {
+  grid.innerHTML = tools.map(t => `
+    <a class="tool-card" href="${t.path}">
+      <div>
+        <p class="tool-name">${t.name}</p>
+        <p class="tool-desc">${t.desc}</p>
+      </div>
+      <span class="arrow">→</span>
+    </a>
+  `).join('');
+}
+</script>
+</body>
+</html>
