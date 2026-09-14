@@ -140,7 +140,7 @@
     
     <div class="name-input-wrap">
       <label for="userName">당신의 이름(또는 닉네임)을 입력해 주세요</label>
-      <input type="text" id="userName" placeholder="예) 서린" maxlength="20">
+      <input type="text" id="userName" placeholder="예) 일꿈" maxlength="20">
     </div>
     
     <button onclick="start()">행복 10계명 만들기</button>
@@ -170,7 +170,7 @@
       <div class="heart">☕</div>
       <div class="eyebrow">MY HAPPINESS MANIFESTO</div>
       <h2 id="resultMainTitle">행복 10계명</h2>
-      <p class="sub">일상에서 찾아낸 소소한 작은 행복들</p>
+      <p class="sub">일상에서 찾아낸 소소하고 확고한 행복들</p>
     </div>
     
     <div class="result-box" id="resultBox"></div>
@@ -188,51 +188,452 @@
 
 <script>
 const questions = [
- {q: "나를 미소 짓게 하는 아침의 시작은 어떤 건가요?", a: ["눈뜨자마자 상쾌한 공기 마시며 기지개 켜기", "따뜻한 차 한 잔 마시며 마음 정돈하기", "좋아하는 음악 틀어놓고 가볍게 몸 움직이기", "사랑하는 사람이나 반려동물 안아주기"]},
- {q: "지친 나에게 선물하고 싶은 최고의 휴식은?", a: ["보송보송한 이불 속에서 푹 자며 충전하기", "온전히 혼자만의 공간에서 책 읽거나 영화 보기", "좋아하는 음악을 들으며 혼자 산책하거나 드라이브하기", "귀여운 반려동물이나 자연/식물과 함께 시간 보내기"]},
- {q: "나의 일상 속 소소한 즐거움은 어떤 건가요?", a: ["길가에 핀 작은 꽃이나 하늘의 구름 사진 찍기", "좋아하는 노래를 크게 틀어놓고 따라 부르기", "깨끗하게 정돈된 공간을 보며 뿌듯해하기", "내가 좋아하는 향기(커피, 풀내음, 향수) 깊게 맡기"]},
- {q: "소중한 사람에게 어떤 말을 들었을 때 행복한가요?", a: ["나의 존재와 노력을 인정해 주는 말을 들었을 때", "나의 작은 변화를 알아채 주는 말을 들었을 때", "말하지 않아도 내 마음을 알아주는 말을 들었을 때", "사랑표현을 해주는 말을 들었을 때"]},
- {q: "사랑하는 가족이나 연인과 함께할 때 가장 소중한 순간은?", a: ["가족이나 연인과 함께 수다 떨며 맛있는 식사할 때", "같이 밖에 나와 산책을 하며 따뜻한 대화를 나눌 때", "기념일을 잊지 않고 작은 선물을 챙겨줄 때", "사랑하는 가족이나 아이와 함박웃음 지으며 스킨십할 때"]},
- {q: "최근 일주일간 시간 가는 줄 모르고 푹 빠져들었던 순간은 언제인가요?", a: ["새로운 분야나 관심사 몰입해서 공부하기 (강의 듣기, 독서 등)", "손으로 무언가 직접 만들고 완성하기 (공예, 요리 등)", "악기 연주나 신나는 음악에 맞춰 리듬 타기", "땀 흘리며 운동하고 찌릿한 성취감 느끼기"]},
- {q: "일상이나 일을 할 때 나에게 가장 큰 성취감을 주는 순간은?", a: ["복잡했던 일이나 주변 정리를 내 손으로 싹 끝냈을 때", "오늘 할 일 목록을 하나씩 차근차근 지워나갈 때", "남들이 쉽게 해결하지 못한 문제를 내가 해결 해냈을 때", "내 일로 타인에게 따뜻한 도움과 영향력이 전달될 때"]},
- {q: "타인에게 어떤 도움을 주었을 때 가장 큰 보람과 행복을 느끼나요?", a: ["내가 공부하고 깨달은 노하우나 정보, 배움을 아낌없이 나누어 줄 때", "상대방의 고민을 깊이 들어주고 묵묵히 편이 되어주며 위로를 전할 때", "복잡하고 얽힌 문제를 깔끔하게 정리해 주거나 효율적인 솔루션을 제시해줄 때", "쾌적한 환경을 만들어 주거나 상대의 번거롭고 힘든 일을 대신 덜어줄 때"]},
- {q: "후회 없는 인생을 살기 위해 매일 가지고 싶은 마음가짐은?", a: ["매일 작더라도 하나의 성과나 배움을 기록하고 칭찬하기", "지나간 과거에 연연하지 않고 '지금, 여기'에 집중하기", "당연하게 여겼던 소소한 일상(날씨, 맛있는 한 끼)에 감사하기", "남과 비교하기보다 어제의 나보다 조금 더 나아진 것에 기뻐하기"]},
- {q: "내가 경제적 자유를 통해 이루고 싶은 것은?", a: ["소중한 사람들에게 아낌없이 맛있는 음식을 대접하거나 선물하기", "시간과 금액에 상관 없이 원하는 때 언제든 여행 떠나기", "내가 진짜 좋아하는 일과 취미에 온전히 시간 쓰기", "사랑하는 사람들과 더 많은 시간을 보내기"]}
+ {
+   q: "나를 미소 짓게 하는 아침의 시작은 어떤 건가요?",
+   a: [
+     "눈뜨자마자 상쾌한 공기 마시며 기지개 켜기",
+     "따뜻한 차 한 잔 마시며 마음 정돈하기",
+     "좋아하는 음악 틀어놓고 가볍게 몸 움직이기",
+     "사랑하는 사람이나 반려동물 안아주기"
+   ]
+ },
+ {
+   q: "지친 나에게 선물하고 싶은 최고의 휴식은?",
+   a: [
+     "보송보송한 이불 속에서 푹 자며 충전하기",
+     "온전히 혼자만의 공간에서 책 읽거나 영화 보기",
+     "좋아하는 음악을 들으며 혼자 산책하거나 드라이브하기",
+     "귀여운 반려동물이나 자연/식물과 함께 시간 보내기"
+   ]
+ },
+ {
+   q: "나의 일상 속 소소한 즐거움은 어떤 건가요?",
+   a: [
+     "길가에 핀 작은 꽃이나 하늘의 구름 사진 찍기",
+     "좋아하는 노래를 크게 틀어놓고 따라 부르기",
+     "깨끗하게 정돈된 공간을 보며 뿌듯해하기",
+     "내가 좋아하는 향기(커피, 풀내음, 향수) 깊게 맡기"
+   ]
+ },
+ {
+   q: "소중한 사람에게 어떤 말을 들었을 때 행복한가요?",
+   a: [
+     "나의 존재와 노력을 인정해 주는 말을 들었을 때",
+     "나의 작은 변화를 알아채 주는 말을 들었을 때",
+     "말하지 않아도 내 마음을 알아주는 말을 들었을 때",
+     "사랑표현을 해주는 말을 들었을 때"
+   ]
+ },
+ {
+   q: "사랑하는 가족이나 연인과 함께할 때 가장 소중한 순간은?",
+   a: [
+     "가족이나 연인과 함께 수다 떨며 맛있는 식사할 때",
+     "같이 밖에 나와 산책을 하며 따뜻한 대화를 나눌 때",
+     "기념일을 잊지 않고 작은 선물을 챙겨줄 때",
+     "사랑하는 가족이나 아이와 함박웃음 지으며 스킨십할 때"
+   ]
+ },
+ {
+   q: "시간 가는 줄 모르고 푹 빠져들었던 순간은 언제인가요?",
+   a: [
+     "새로운 분야나 관심사 몰입해서 공부하기 (강의 듣기, 독서)",
+     "손으로 무언가 직접 만들고 완성하기 (글쓰기, 코드 작성, 공예, 요리)",
+     "악기 연주나 신나는 음악에 맞춰 리듬 타기",
+     "땀 흘리며 운동하고 찌릿한 성취감 느끼기"
+   ]
+ },
+ {
+   q: "일상이나 일을 할 때 나에게 가장 큰 성취감을 주는 순간은?",
+   a: [
+     "복잡했던 일이나 주변 정리를 내 손으로 싹 끝냈을 때",
+     "오늘 할 일 목록을 하나씩 차근차근 지워나갈 때",
+     "나만의 작은 노하우나 경험으로 문제를 쉽게 해결했을 때",
+     "내 일로 타인에게 따뜻한 도움과 영향력이 전달될 때"
+   ]
+ },
+ {
+   q: "타인에게 어떤 도움을 주었을 때 가장 큰 보람과 행복을 느끼나요?",
+   a: [
+     "내가 공부하고 깨달은 노하우나 정보, 배움을 아낌없이 나누어 줄 때",
+     "상대방의 고민을 깊이 들어주고 묵묵히 편이 되어주며 위로를 전할 때",
+     "복잡하고 얽힌 문제를 깔끔하게 정리해 주거나 효율적인 솔루션을 제시해줄 때",
+     "쾌적한 환경을 만들어 주거나 상대의 번거롭고 힘든 일을 대신 덜어줄 때"
+   ]
+ },
+ {
+   q: "후회 없는 인생을 살기 위해 매일 가질 마음가짐은?",
+   a: [
+     "매일 작더라도 하나의 성과나 배움을 기록하고 칭찬하기",
+     "지나간 과거에 연연하지 않고 '지금, 여기'에 집중하기",
+     "당연하게 여겼던 소소한 일상(날씨, 맛있는 한 끼)에 감사하기",
+     "남과 비교하기보다 어제의 나보다 조금 더 나아진 것에 기뻐하기"
+   ]
+ },
+ {
+   q: "내가 경제적 자유를 통해 이루고 싶은 것은?",
+   a: [
+     "소중한 사람들에게 아낌없이 맛있는 음식을 대접하거나 선물하기",
+     "시간과 금액에 상관 없이 원하는 때 언제든 여행 떠나기",
+     "내가 진짜 좋아하는 일과 취미에 온전히 시간 쓰기",
+     "사랑하는 사람들과 더 많은 시간을 보내기"
+   ]
+ }
 ];
 
 let idx=0, answers=[], userName="나";
 
-function start(){const inputName = document.getElementById('userName').value.trim(); userName = inputName ? inputName : "나"; idx = 0; answers = []; document.getElementById('intro').classList.add('hidden'); document.getElementById('result').classList.add('hidden'); document.getElementById('quiz').classList.remove('hidden'); render();}
+function start(){
+  const inputName = document.getElementById('userName').value.trim();
+  userName = inputName ? inputName : "나";
+  
+  idx = 0;
+  answers = [];
+  document.getElementById('intro').classList.add('hidden');
+  document.getElementById('result').classList.add('hidden');
+  document.getElementById('quiz').classList.remove('hidden');
+  render();
+}
 
-function render(){const x = questions[idx]; document.getElementById('qnum').textContent = `QUESTION ${String(idx+1).padStart(2,'0')} / ${questions.length}`; document.getElementById('question').textContent = x.q; document.getElementById('bar').style.width = ((idx) / questions.length * 100) + '%'; const box = document.getElementById('options'); box.innerHTML = ''; document.getElementById('customBox').style.display = 'none'; document.getElementById('customInput').value = ''; x.a.forEach((t) => {const b = document.createElement('button'); b.className = 'option'; b.textContent = t; b.onclick = () => answer(t); box.appendChild(b);}); const customBtn = document.createElement('button'); customBtn.className = 'option ghost'; customBtn.style.border = '1.5px dashed var(--accent)'; customBtn.textContent = '✏️ 내가 직접 입력하기...'; customBtn.onclick = () => {document.getElementById('customBox').style.display = 'flex'; document.getElementById('customInput').focus();}; box.appendChild(customBtn);}
+function render(){
+  const x = questions[idx];
+  document.getElementById('qnum').textContent = `QUESTION ${String(idx+1).padStart(2,'0')} / ${questions.length}`;
+  document.getElementById('question').textContent = x.q;
+  document.getElementById('bar').style.width = ((idx) / questions.length * 100) + '%';
+  
+  const box = document.getElementById('options');
+  box.innerHTML = '';
+  document.getElementById('customBox').style.display = 'none';
+  document.getElementById('customInput').value = '';
 
-function submitCustom(){const val = document.getElementById('customInput').value.trim(); if(!val){alert('답변을 입력해 주세요!'); return;} answer(val);}
+  x.a.forEach((t) => {
+    const b = document.createElement('button');
+    b.className = 'option';
+    b.textContent = t;
+    b.onclick = () => answer(t);
+    box.appendChild(b);
+  });
 
-function answer(t){answers[idx] = t; idx++; if(idx < questions.length) {render();} else {showResult();}}
+  const customBtn = document.createElement('button');
+  customBtn.className = 'option ghost';
+  customBtn.style.border = '1.5px dashed var(--accent)';
+  customBtn.textContent = '✏️ 내가 직접 입력하기...';
+  customBtn.onclick = () => {
+    document.getElementById('customBox').style.display = 'flex';
+    document.getElementById('customInput').focus();
+  };
+  box.appendChild(customBtn);
+}
 
-function goBack(){if(idx > 0){idx--; render();} else {document.getElementById('quiz').classList.add('hidden'); document.getElementById('intro').classList.remove('hidden');}}
+function submitCustom(){
+  const val = document.getElementById('customInput').value.trim();
+  if(!val){
+    alert('답변을 입력해 주세요!');
+    return;
+  }
+  answer(val);
+}
 
-function goBackFromResult(){document.getElementById('result').classList.add('hidden'); document.getElementById('quiz').classList.remove('hidden'); idx = questions.length - 1; render();}
+function answer(t){
+  answers[idx] = t;
+  idx++;
+  if(idx < questions.length) {
+    render();
+  } else {
+    showResult();
+  }
+}
 
-function showResult(){document.getElementById('quiz').classList.add('hidden'); document.getElementById('result').classList.remove('hidden'); document.getElementById('resultMainTitle').textContent = `${userName}의 행복 10계명`; const box = document.getElementById('resultBox'); box.innerHTML = answers.map((v, i) => `<div class="result-item"><label>${i+1}.</label><input type="text" id="resInput${i}" value="${escapeHtml(v)}" maxlength="80"></div>`).join('');}
+function goBack(){
+  if(idx > 0){
+    idx--;
+    render();
+  } else {
+    document.getElementById('quiz').classList.add('hidden');
+    document.getElementById('intro').classList.remove('hidden');
+  }
+}
 
-function getLatestAnswers() {const inputs = document.querySelectorAll('.result-item input'); if(inputs.length > 0) {return Array.from(inputs).map((input, idx) => `${idx + 1}. ${input.value.trim()}`);} return answers.map((v, i) => `${i + 1}. ${v}`);}
+function goBackFromResult(){
+  document.getElementById('result').classList.add('hidden');
+  document.getElementById('quiz').classList.remove('hidden');
+  idx = questions.length - 1;
+  render();
+}
 
-function escapeHtml(s){return s.replace(/[&<>\"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));}
+function showResult(){
+  document.getElementById('quiz').classList.add('hidden');
+  document.getElementById('result').classList.remove('hidden');
+  
+  document.getElementById('resultMainTitle').textContent = `${userName}의 행복 10계명`;
 
-function copyResult(){const latestList = getLatestAnswers(); const fullText = `[${userName}의 행복 10계명] 💛\n~ 일상에서 찾아낸 소소한 행복들 ~\n\n${latestList.join('\n')}\n\n✨ 매일 마음에 새기는 나만의 약속`; navigator.clipboard?.writeText(fullText).then(() => alert(`${userName}의 행복 10계명이 복사되었습니다. 💛`)).catch(() => alert('복사가 지원되지 않는 브라우저입니다.'));}
+  const box = document.getElementById('resultBox');
+  box.innerHTML = answers.map((v, i) => `
+    <div class="result-item">
+      <label>${i+1}.</label>
+      <input type="text" id="resInput${i}" value="${escapeHtml(v)}" maxlength="80">
+    </div>
+  `).join('');
+}
 
-function generateHappinessImage(mode, callback) {const vals = getLatestAnswers(); const tempCanvas = document.createElement('canvas'); const tempCtx = tempCanvas.getContext('2d'); tempCtx.font = '400 34px "Noto Sans KR", Arial, sans-serif'; let W, H, cardW, cardH, cardX, cardY; if (mode === 'wallpaper') {W = 1080; cardW = 960; const maxTextWidth = 720; let contentHeight = 0; const parsedItems = vals.map(itemText => {const match = itemText.match(/^(\d+\.\s*)(.*)/); const numberStr = match ? match[1] : ''; const contentText = match ? match[2] : itemText; const lines = wrapCanvasText(tempCtx, contentText, maxTextWidth); const itemH = Math.max(1, lines.length) * 50 + 20; contentHeight += itemH; return { numberStr, contentText, lines, itemH };}); cardH = 390 + contentHeight + 200; H = Math.max(1920, cardH + 200); cardX = (W - cardW) / 2; cardY = (H - cardH) / 2; renderCanvas(W, H, cardX, cardY, cardW, cardH, parsedItems, mode, callback);} else {let maxSentenceWidth = 0; vals.forEach(itemText => {const match = itemText.match(/^(\d+\.\s*)(.*)/); const contentText = match ? match[2] : itemText; const width = tempCtx.measureText(contentText).width; if (width > maxSentenceWidth) {maxSentenceWidth = width;}}); cardW = Math.max(850, Math.ceil(maxSentenceWidth + 260)); W = cardW + 120; let contentHeight = 0; const parsedItems = vals.map(itemText => {const match = itemText.match(/^(\d+\.\s*)(.*)/); const numberStr = match ? match[1] : ''; const contentText = match ? match[2] : itemText; const lines = [contentText]; const itemH = 50 + 16; contentHeight += itemH; return { numberStr, contentText, lines, itemH };}); cardH = 380 + contentHeight + 200; H = cardH + 120; cardX = (W - cardW) / 2; cardY = 60; renderCanvas(W, H, cardX, cardY, cardW, cardH, parsedItems, mode, callback);}}
+function getLatestAnswers() {
+  const inputs = document.querySelectorAll('.result-item input');
+  if(inputs.length > 0) {
+    return Array.from(inputs).map((input, idx) => `${idx + 1}. ${input.value.trim()}`);
+  }
+  return answers.map((v, i) => `${i + 1}. ${v}`);
+}
 
-function renderCanvas(W, H, cardX, cardY, cardW, cardH, parsedItems, mode, callback) {const scale = 2; const canvas = document.createElement('canvas'); canvas.width = W * scale; canvas.height = H * scale; const c = canvas.getContext('2d'); c.scale(scale, scale); const bgGrad = c.createLinearGradient(0, 0, W, H); if (mode === 'wallpaper') {bgGrad.addColorStop(0, '#fdf3e9'); bgGrad.addColorStop(0.5, '#f7e7da'); bgGrad.addColorStop(1, '#ebd7c8');} else {bgGrad.addColorStop(0, '#f9ede3'); bgGrad.addColorStop(1, '#ebdcd0');} c.fillStyle = bgGrad; c.fillRect(0, 0, W, H); c.shadowColor = 'rgba(176, 120, 92, 0.15)'; c.shadowBlur = 45; c.shadowOffsetY = 15; c.fillStyle = '#ffffff'; roundRect(c, cardX, cardY, cardW, cardH, 44); c.fill(); c.shadowColor = 'transparent'; c.strokeStyle = '#f4e3da'; c.lineWidth = 3; c.stroke(); drawSunsetLandscape(c, W / 2, cardY + 105); c.textAlign = 'center'; c.fillStyle = '#d97757'; c.font = '700 21px "Noto Sans KR", Arial, sans-serif'; c.fillText('MY HAPPINESS MANIFESTO', W / 2, cardY + 215); c.fillStyle = '#3a322d'; c.font = '700 48px Georgia, serif'; c.fillText(`${userName}의 행복 10계명`, W / 2, cardY + 290); c.fillStyle = '#998a80'; c.font = '400 22px "Noto Sans KR", Arial, sans-serif'; c.fillText('일상에서 찾아낸 소소하고 작은 행복들', W / 2, cardY + 345); c.strokeStyle = '#eddcd0'; c.lineWidth = 2; c.beginPath(); c.moveTo(cardX + 60, cardY + 385); c.lineTo(cardX + cardW - 60, cardY + 385); c.stroke(); c.textAlign = 'left'; let y = cardY + 450; const numX = cardX + 65; const textX = cardX + 130; parsedItems.forEach(item => {c.fillStyle = '#d97757'; c.font = '700 34px "Noto Sans KR", Arial, sans-serif'; c.fillText(item.numberStr, numX, y); c.fillStyle = '#3a322d'; c.font = '400 34px "Noto Sans KR", Arial, sans-serif'; item.lines.forEach((line, j) => {c.fillText(line, textX, y + (j * 48));}); y += item.itemH;}); c.textAlign = 'center'; c.fillStyle = '#d97757'; c.font = '32px Georgia, serif'; c.fillText('☕', W / 2, cardY + cardH - 100); c.fillStyle = '#b09f94'; c.font = '500 19px "Noto Sans KR", Arial, sans-serif'; c.fillText('my little happiness', W / 2, cardY + cardH - 60); canvas.toBlob(blob => {callback(canvas, blob);}, 'image/png');}
+function escapeHtml(s){
+  return s.replace(/[&<>"']/g, m => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]));
+}
 
-function drawSunsetLandscape(ctx, cx, cy) {ctx.save(); ctx.beginPath(); ctx.arc(cx, cy, 50, 0, Math.PI * 2); ctx.clip(); ctx.fillStyle = '#fdebe0'; ctx.fillRect(cx - 70, cy - 70, 140, 140); ctx.fillStyle = '#f7ab8a'; ctx.beginPath(); ctx.arc(cx, cy + 8, 28, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = '#e88e6b'; ctx.beginPath(); ctx.arc(cx - 26, cy + 44, 40, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = '#d97757'; ctx.beginPath(); ctx.arc(cx + 28, cy + 46, 38, 0, Math.PI * 2); ctx.fill(); ctx.restore(); ctx.strokeStyle = '#f4e3da'; ctx.lineWidth = 3.5; ctx.beginPath(); ctx.arc(cx, cy, 53, 0, Math.PI * 2); ctx.stroke();}
+function copyResult(){
+  const latestList = getLatestAnswers();
+  const fullText = `[${userName}의 행복 10계명] 💛\n~ 일상에서 찾아낸 소소한 행복들 ~\n\n${latestList.join('\n')}\n\n✨ 매일 마음에 새기는 나만의 약속`;
 
-async function shareOrSaveImage(mode) {generateHappinessImage(mode, async (canvas, blob) => {const fileName = mode === 'wallpaper' ? `${userName}_행복_10계명_배경화면.png` : `${userName}_행복_10계명_카드.png`; const file = new File([blob], fileName, { type: 'image/png' }); if (navigator.canShare && navigator.canShare({ files: [file] })) {try {await navigator.share({files: [file], title: `${userName}의 행복 10계명`, text: `내가 직접 고르고 작성한 ${userName}의 행복 10계명입니다.`}); return;} catch (err) {if (err.name !== 'AbortError') {console.error(err);}}} const link = document.createElement('a'); link.download = fileName; link.href = canvas.toDataURL('image/png'); link.click();});}
+  navigator.clipboard?.writeText(fullText)
+    .then(() => alert(`${userName}의 행복 10계명이 복사되었습니다. 💛`))
+    .catch(() => alert('복사가 지원되지 않는 브라우저입니다.'));
+}
 
-function roundRect(ctx,x,y,w,h,r){ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath();}
+function generateHappinessImage(mode, callback) {
+  const vals = getLatestAnswers();
 
-function wrapCanvasText(ctx, text, maxWidth) {const chars = [...text]; const lines = []; let line = ''; for (const ch of chars) {const testLine = line + ch; if (ctx.measureText(testLine).width > maxWidth && line) {lines.push(line); line = ch;} else {line = testLine;}} if (line) lines.push(line); return lines;}
+  const tempCanvas = document.createElement('canvas');
+  const tempCtx = tempCanvas.getContext('2d');
+  
+  tempCtx.font = '400 40px "Noto Sans KR", Arial, sans-serif';
+
+  let W, H, cardW, cardH, cardX, cardY;
+
+  if (mode === 'wallpaper') {
+    W = 1080;
+    cardW = 1000;
+    const maxTextWidth = 840;
+
+    let contentHeight = 0;
+    const parsedItems = vals.map(itemText => {
+      const match = itemText.match(/^(\d+\.\s*)(.*)/);
+      const numberStr = match ? match[1] : '';
+      const contentText = match ? match[2] : itemText;
+      const lines = wrapCanvasText(tempCtx, contentText, maxTextWidth);
+
+      const itemH = Math.max(1, lines.length) * 56 + 20;
+      contentHeight += itemH;
+      return { numberStr, contentText, lines, itemH };
+    });
+
+    cardH = 370 + contentHeight + 180;
+    H = Math.max(1920, cardH + 120);
+    cardX = (W - cardW) / 2;
+    cardY = (H - cardH) / 2;
+
+    renderCanvas(W, H, cardX, cardY, cardW, cardH, parsedItems, mode, callback);
+  } else {
+    let maxSentenceWidth = 0;
+    vals.forEach(itemText => {
+      const match = itemText.match(/^(\d+\.\s*)(.*)/);
+      const contentText = match ? match[2] : itemText;
+      const width = tempCtx.measureText(contentText).width;
+      if (width > maxSentenceWidth) {
+        maxSentenceWidth = width;
+      }
+    });
+
+    cardW = Math.max(900, Math.ceil(maxSentenceWidth + 200));
+    W = cardW + 80;
+
+    let contentHeight = 0;
+    const parsedItems = vals.map(itemText => {
+      const match = itemText.match(/^(\d+\.\s*)(.*)/);
+      const numberStr = match ? match[1] : '';
+      const contentText = match ? match[2] : itemText;
+      const lines = [contentText];
+      const itemH = 56 + 16;
+      contentHeight += itemH;
+      return { numberStr, contentText, lines, itemH };
+    });
+
+    cardH = 360 + contentHeight + 170;
+    H = cardH + 80;
+    cardX = (W - cardW) / 2;
+    cardY = 40;
+
+    renderCanvas(W, H, cardX, cardY, cardW, cardH, parsedItems, mode, callback);
+  }
+}
+
+function renderCanvas(W, H, cardX, cardY, cardW, cardH, parsedItems, mode, callback) {
+  const scale = 2;
+  const canvas = document.createElement('canvas');
+  canvas.width = W * scale;
+  canvas.height = H * scale;
+  const c = canvas.getContext('2d');
+  c.scale(scale, scale);
+
+  const bgGrad = c.createLinearGradient(0, 0, W, H);
+  if (mode === 'wallpaper') {
+    bgGrad.addColorStop(0, '#fdf3e9');
+    bgGrad.addColorStop(0.5, '#f7e7da');
+    bgGrad.addColorStop(1, '#ebd7c8');
+  } else {
+    bgGrad.addColorStop(0, '#f9ede3');
+    bgGrad.addColorStop(1, '#ebdcd0');
+  }
+  c.fillStyle = bgGrad;
+  c.fillRect(0, 0, W, H);
+
+  c.shadowColor = 'rgba(176, 120, 92, 0.15)';
+  c.shadowBlur = 45;
+  c.shadowOffsetY = 15;
+  c.fillStyle = '#ffffff';
+
+  roundRect(c, cardX, cardY, cardW, cardH, 44);
+  c.fill();
+  c.shadowColor = 'transparent';
+
+  c.strokeStyle = '#f4e3da';
+  c.lineWidth = 3;
+  c.stroke();
+
+  drawSunsetLandscape(c, W / 2, cardY + 95);
+
+  c.textAlign = 'center';
+  c.fillStyle = '#d97757';
+  c.font = '700 24px "Noto Sans KR", Arial, sans-serif';
+  c.fillText('MY HAPPINESS MANIFESTO', W / 2, cardY + 195);
+
+  c.fillStyle = '#3a322d';
+  c.font = '700 54px Georgia, serif';
+  c.fillText(`${userName}의 행복 10계명`, W / 2, cardY + 270);
+
+  c.fillStyle = '#998a80';
+  c.font = '400 24px "Noto Sans KR", Arial, sans-serif';
+  c.fillText('일상에서 찾아낸 소소하고 확고한 행복들', W / 2, cardY + 325);
+
+  c.strokeStyle = '#eddcd0';
+  c.lineWidth = 2;
+  c.beginPath();
+  c.moveTo(cardX + 40, cardY + 365);
+  c.lineTo(cardX + cardW - 40, cardY + 365);
+  c.stroke();
+
+  c.textAlign = 'left';
+  let y = cardY + 435;
+  const numX = cardX + 45;
+  const textX = cardX + 115;
+
+  parsedItems.forEach(item => {
+    c.fillStyle = '#d97757';
+    c.font = '700 40px "Noto Sans KR", Arial, sans-serif';
+    c.fillText(item.numberStr, numX, y);
+
+    c.fillStyle = '#3a322d';
+    c.font = '400 40px "Noto Sans KR", Arial, sans-serif';
+    item.lines.forEach((line, j) => {
+      c.fillText(line, textX, y + (j * 56));
+    });
+
+    y += item.itemH;
+  });
+
+  c.textAlign = 'center';
+  c.fillStyle = '#d97757';
+  c.font = '36px Georgia, serif';
+  c.fillText('☕', W / 2, cardY + cardH - 85);
+  c.fillStyle = '#b09f94';
+  c.font = '500 22px "Noto Sans KR", Arial, sans-serif';
+  c.fillText('my little happiness', W / 2, cardY + cardH - 45);
+
+  canvas.toBlob(blob => {
+    callback(canvas, blob);
+  }, 'image/png');
+}
+
+function drawSunsetLandscape(ctx, cx, cy) {
+  ctx.save();
+  ctx.beginPath();
+  ctx.arc(cx, cy, 45, 0, Math.PI * 2);
+  ctx.clip();
+
+  ctx.fillStyle = '#fdebe0';
+  ctx.fillRect(cx - 70, cy - 70, 140, 140);
+
+  ctx.fillStyle = '#f7ab8a';
+  ctx.beginPath();
+  ctx.arc(cx, cy + 8, 25, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.fillStyle = '#e88e6b';
+  ctx.beginPath();
+  ctx.arc(cx - 24, cy + 40, 36, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.fillStyle = '#d97757';
+  ctx.beginPath();
+  ctx.arc(cx + 26, cy + 42, 34, 0, Math.PI * 2);
+  ctx.fill();
+
+  ctx.restore();
+
+  ctx.strokeStyle = '#f4e3da';
+  ctx.lineWidth = 3.5;
+  ctx.beginPath();
+  ctx.arc(cx, cy, 48, 0, Math.PI * 2);
+  ctx.stroke();
+}
+
+async function shareOrSaveImage(mode) {
+  generateHappinessImage(mode, async (canvas, blob) => {
+    const fileName = mode === 'wallpaper' ? `${userName}_행복_10계명_배경화면.png` : `${userName}_행복_10계명_카드.png`;
+    const file = new File([blob], fileName, { type: 'image/png' });
+
+    if (navigator.canShare && navigator.canShare({ files: [file] })) {
+      try {
+        await navigator.share({
+          files: [file],
+          title: `${userName}의 행복 10계명`,
+          text: `내가 직접 고르고 작성한 ${userName}의 행복 10계명입니다.`
+        });
+        return;
+      } catch (err) {
+        if (err.name !== 'AbortError') {
+          console.error(err);
+        }
+      }
+    }
+
+    const link = document.createElement('a');
+    link.download = fileName;
+    link.href = canvas.toDataURL('image/png');
+    link.click();
+  });
+}
+
+function roundRect(ctx,x,y,w,h,r){
+  ctx.beginPath();
+  ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r);
+  ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r);
+  ctx.arcTo(x,y,x+w,y,r); ctx.closePath();
+}
+
+function wrapCanvasText(ctx, text, maxWidth) {
+  const chars = [...text];
+  const lines = [];
+  let line = '';
+  
+  for (const ch of chars) {
+    const testLine = line + ch;
+    if (ctx.measureText(testLine).width > maxWidth && line) {
+      lines.push(line);
+      line = ch;
+    } else {
+      line = testLine;
+    }
+  }
+  if (line) lines.push(line);
+  return lines;
+}
 </script>
 </body>
 </html>
