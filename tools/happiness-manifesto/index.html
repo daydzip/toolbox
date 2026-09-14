@@ -177,8 +177,9 @@
     <div class="edit-hint">💡 각 문장을 터치해 언제든지 수정할 수 있어요!</div>
     
     <button onclick="copyResult()">텍스트 복사하기</button>
-    <button class="ghost" onclick="shareOrSaveImage('wallpaper')">📱 핸드폰 배경화면 저장</button>
-    <button class="ghost" onclick="shareOrSaveImage('card')">🖼️ 카드 이미지 저장</button>
+    <button class="ghost" onclick="shareOrSaveImage('wallpaper')">📱 핸드폰 배경으로 공유</button>
+    <button class="ghost" onclick="shareOrSaveImage('card')">🖼️ 카드 이미지로 공유</button>
+    <button class="ghost" onclick="downloadImage()">💾 이미지 저장하기</button>
     <button class="ghost" style="margin-top:8px;" onclick="goBackFromResult()">✏️ 질문으로 돌아가서 다시 고르기</button>
     <p class="small">※ 테스트 결과는 이 브라우저에만 저장되며 외부로 전송되지 않습니다.</p>
   </div>
@@ -611,6 +612,20 @@ async function shareOrSaveImage(mode) {
     }
 
     // 2. Web Share API 미지원 및 실패 시 직접 다운로드
+    const link = document.createElement('a');
+    link.download = fileName;
+    link.href = URL.createObjectURL(blob);
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+  });
+}
+
+// 새로운 이미지 저장하기 함수 (카드 이미지만 다운로드)
+async function downloadImage() {
+  await generateHappinessImage('card', async (canvas, blob) => {
+    const fileName = `${userName}_행복_10계명_카드.png`;
     const link = document.createElement('a');
     link.download = fileName;
     link.href = URL.createObjectURL(blob);
