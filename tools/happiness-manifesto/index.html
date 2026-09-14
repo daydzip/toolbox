@@ -396,19 +396,25 @@ function copyResult(){
     .catch(() => alert('복사가 지원되지 않는 브라우저입니다.'));
 }
 
-function generateHappinessImage(mode, callback) {
+async function generateHappinessImage(mode, callback) {
+  // 웹폰트 로드 완료 후 렌더링 보장
+  if (document.fonts) {
+    await document.fonts.ready;
+  }
+  
   const vals = getLatestAnswers();
-
   const tempCanvas = document.createElement('canvas');
   const tempCtx = tempCanvas.getContext('2d');
-  tempCtx.font = '400 34px "Noto Sans KR", Arial, sans-serif';
+  
+  // 폰트 크기를 40px로 확대하여 본문 텍스트 렌더링
+  tempCtx.font = '400 40px "Noto Sans KR", Arial, sans-serif';
 
   let W, H, cardW, cardH, cardX, cardY;
 
   if (mode === 'wallpaper') {
     W = 1080;
-    cardW = 960;
-    const maxTextWidth = 720;
+    cardW = 1000;
+    const maxTextWidth = 840; // 가로 여백 넓혀서 글자 공간 대폭 확보
 
     let contentHeight = 0;
     const parsedItems = vals.map(itemText => {
@@ -417,19 +423,19 @@ function generateHappinessImage(mode, callback) {
       const contentText = match ? match[2] : itemText;
       const lines = wrapCanvasText(tempCtx, contentText, maxTextWidth);
 
-      const itemH = Math.max(1, lines.length) * 50 + 20;
+      const itemH = Math.max(1, lines.length) * 56 + 20;
       contentHeight += itemH;
       return { numberStr, contentText, lines, itemH };
     });
 
-    // 텍스트와 하단 푸터 간격 상향 조정 (+200px)
-    cardH = 390 + contentHeight + 200;
-    H = Math.max(1920, cardH + 200);
+    cardH = 370 + contentHeight + 200;
+    H = Math.max(1920, cardH + 120);
     cardX = (W - cardW) / 2;
     cardY = (H - cardH) / 2;
 
     renderCanvas(W, H, cardX, cardY, cardW, cardH, parsedItems, mode, callback);
   } else {
+    // 카드 모드: 폰트 40px 동적 너비 측정하여 한 줄 배치
     let maxSentenceWidth = 0;
     vals.forEach(itemText => {
       const match = itemText.match(/^(\d+\.\s*)(.*)/);
@@ -440,8 +446,8 @@ function generateHappinessImage(mode, callback) {
       }
     });
 
-    cardW = Math.max(850, Math.ceil(maxSentenceWidth + 260));
-    W = cardW + 120;
+    cardW = Math.max(900, Math.ceil(maxSentenceWidth + 200));
+    W = cardW + 80;
 
     let contentHeight = 0;
     const parsedItems = vals.map(itemText => {
@@ -449,16 +455,15 @@ function generateHappinessImage(mode, callback) {
       const numberStr = match ? match[1] : '';
       const contentText = match ? match[2] : itemText;
       const lines = [contentText];
-      const itemH = 50 + 16;
+      const itemH = 56 + 16;
       contentHeight += itemH;
       return { numberStr, contentText, lines, itemH };
     });
 
-    // 카드 모드 푸터 여백을 200px로 넉넉하게 확장하여 커피 아이콘 겹침 방지
-    cardH = 380 + contentHeight + 200;
-    H = cardH + 120;
+    cardH = 360 + contentHeight + 200;
+    H = cardH + 80;
     cardX = (W - cardW) / 2;
-    cardY = 60;
+    cardY = 40;
 
     renderCanvas(W, H, cardX, cardY, cardW, cardH, parsedItems, mode, callback);
   }
@@ -497,55 +502,54 @@ function renderCanvas(W, H, cardX, cardY, cardW, cardH, parsedItems, mode, callb
   c.lineWidth = 3;
   c.stroke();
 
-  drawSunsetLandscape(c, W / 2, cardY + 105);
+  drawSunsetLandscape(c, W / 2, cardY + 95);
 
   c.textAlign = 'center';
   c.fillStyle = '#d97757';
-  c.font = '700 21px "Noto Sans KR", Arial, sans-serif';
-  c.fillText('MY HAPPINESS MANIFESTO', W / 2, cardY + 215);
+  c.font = '700 24px "Noto Sans KR", Arial, sans-serif';
+  c.fillText('MY HAPPINESS MANIFESTO', W / 2, cardY + 195);
 
   c.fillStyle = '#3a322d';
-  c.font = '700 48px Georgia, serif';
-  c.fillText(`${userName}의 행복 10계명`, W / 2, cardY + 290);
+  c.font = '700 54px Georgia, serif';
+  c.fillText(`${userName}의 행복 10계명`, W / 2, cardY + 270);
 
   c.fillStyle = '#998a80';
-  c.font = '400 22px "Noto Sans KR", Arial, sans-serif';
-  c.fillText('일상에서 찾아낸 소소하고 확고한 행복들', W / 2, cardY + 345);
+  c.font = '400 24px "Noto Sans KR", Arial, sans-serif';
+  c.fillText('일상에서 찾아낸 소소하고 확고한 행복들', W / 2, cardY + 325);
 
   c.strokeStyle = '#eddcd0';
   c.lineWidth = 2;
   c.beginPath();
-  c.moveTo(cardX + 60, cardY + 385);
-  c.lineTo(cardX + cardW - 60, cardY + 385);
+  c.moveTo(cardX + 40, cardY + 365);
+  c.lineTo(cardX + cardW - 40, cardY + 365);
   c.stroke();
 
   c.textAlign = 'left';
-  let y = cardY + 450;
-  const numX = cardX + 65;
-  const textX = cardX + 130;
+  let y = cardY + 435;
+  const numX = cardX + 45;
+  const textX = cardX + 115;
 
   parsedItems.forEach(item => {
     c.fillStyle = '#d97757';
-    c.font = '700 34px "Noto Sans KR", Arial, sans-serif';
+    c.font = '700 40px "Noto Sans KR", Arial, sans-serif';
     c.fillText(item.numberStr, numX, y);
 
     c.fillStyle = '#3a322d';
-    c.font = '400 34px "Noto Sans KR", Arial, sans-serif';
+    c.font = '400 40px "Noto Sans KR", Arial, sans-serif';
     item.lines.forEach((line, j) => {
-      c.fillText(line, textX, y + (j * 48));
+      c.fillText(line, textX, y + (j * 56));
     });
 
     y += item.itemH;
   });
 
-  // 푸터 아이콘 위치를 카드 하단에 맞춰 여유 있게 배치
   c.textAlign = 'center';
   c.fillStyle = '#d97757';
-  c.font = '32px Georgia, serif';
-  c.fillText('☕', W / 2, cardY + cardH - 100);
+  c.font = '36px Georgia, serif';
+  c.fillText('☕', W / 2, cardY + cardH - 85);
   c.fillStyle = '#b09f94';
-  c.font = '500 19px "Noto Sans KR", Arial, sans-serif';
-  c.fillText('my little happiness', W / 2, cardY + cardH - 60);
+  c.font = '500 22px "Noto Sans KR", Arial, sans-serif';
+  c.fillText('my little happiness', W / 2, cardY + cardH - 45);
 
   canvas.toBlob(blob => {
     callback(canvas, blob);
@@ -555,7 +559,7 @@ function renderCanvas(W, H, cardX, cardY, cardW, cardH, parsedItems, mode, callb
 function drawSunsetLandscape(ctx, cx, cy) {
   ctx.save();
   ctx.beginPath();
-  ctx.arc(cx, cy, 50, 0, Math.PI * 2);
+  ctx.arc(cx, cy, 45, 0, Math.PI * 2);
   ctx.clip();
 
   ctx.fillStyle = '#fdebe0';
@@ -563,17 +567,17 @@ function drawSunsetLandscape(ctx, cx, cy) {
 
   ctx.fillStyle = '#f7ab8a';
   ctx.beginPath();
-  ctx.arc(cx, cy + 8, 28, 0, Math.PI * 2);
+  ctx.arc(cx, cy + 8, 25, 0, Math.PI * 2);
   ctx.fill();
 
   ctx.fillStyle = '#e88e6b';
   ctx.beginPath();
-  ctx.arc(cx - 26, cy + 44, 40, 0, Math.PI * 2);
+  ctx.arc(cx - 24, cy + 40, 36, 0, Math.PI * 2);
   ctx.fill();
 
   ctx.fillStyle = '#d97757';
   ctx.beginPath();
-  ctx.arc(cx + 28, cy + 46, 38, 0, Math.PI * 2);
+  ctx.arc(cx + 26, cy + 42, 34, 0, Math.PI * 2);
   ctx.fill();
 
   ctx.restore();
@@ -581,34 +585,39 @@ function drawSunsetLandscape(ctx, cx, cy) {
   ctx.strokeStyle = '#f4e3da';
   ctx.lineWidth = 3.5;
   ctx.beginPath();
-  ctx.arc(cx, cy, 53, 0, Math.PI * 2);
+  ctx.arc(cx, cy, 48, 0, Math.PI * 2);
   ctx.stroke();
 }
 
+// 모바일 웹 이미지 저장 / 공유 안전 다운로드 로직 보완
 async function shareOrSaveImage(mode) {
-  generateHappinessImage(mode, async (canvas, blob) => {
+  await generateHappinessImage(mode, async (canvas, blob) => {
     const fileName = mode === 'wallpaper' ? `${userName}_행복_10계명_배경화면.png` : `${userName}_행복_10계명_카드.png`;
     const file = new File([blob], fileName, { type: 'image/png' });
 
+    // 1. 모바일 브라우저 공유 지원 확인
     if (navigator.canShare && navigator.canShare({ files: [file] })) {
       try {
         await navigator.share({
           files: [file],
           title: `${userName}의 행복 10계명`,
-          text: `내가 직접 고르고 작성한 ${userName}의 행복 10계명입니다.`
+          text: `내가 직접 작성한 ${userName}의 행복 10계명입니다.`
         });
         return;
       } catch (err) {
-        if (err.name !== 'AbortError') {
-          console.error(err);
-        }
+        // 취소(AbortError) 이외의 경우에만 파일 직접 다운로드 시도
+        if (err.name === 'AbortError') return;
       }
     }
 
+    // 2. Web Share API 미지원 및 실패 시 직접 다운로드
     const link = document.createElement('a');
     link.download = fileName;
-    link.href = canvas.toDataURL('image/png');
+    link.href = URL.createObjectURL(blob);
+    document.body.appendChild(link);
     link.click();
+    document.body.removeChild(link);
+    setTimeout(() => URL.revokeObjectURL(link.href), 1000);
   });
 }
 
